@@ -7,6 +7,8 @@ using namespace std;
 bool isSameString(string a, string b);
 unsigned short digitsCounter(int num);
 void num2chars(int num, char **chars);
+void printSeating(bool seating[15][20]);
+int starCounter(int light[6][8]);
 
 int main()
 {
@@ -69,13 +71,13 @@ int main()
         getline(cin,in);
         // almacena si el caracter ya existe
         bool character[256] = {};
-        for (int i = 0; i < in.length(); i++)
+        for (int i = 0; i < (int)in.length(); i++)
         {
             char individual = tolower(in[i]);
             // si el caracter no ha aparecido se agrega a la cadena 'out' y se marcar en el array 'caracter'
-            if (!character[individual])
+            if (!character[(int)individual])
             {
-                character[individual] = true;
+                character[(int)individual] = true;
                 out += individual;
             }
         }
@@ -86,14 +88,17 @@ int main()
     {
         int n;
         string a;
+        int sum = 0;
+
         cout << "ingrese un numero: ";
         cin >> n;
         cin.ignore();
         cout << "ingrese una cadena de caracteres numericos: ";
         getline(cin, a);
         cout << "original: " << a;
-        int sum = 0;
+
         int pos = 1;
+        // es una variable auxiliar para iterar el arreglo, pos es el que se encarga de almacenar la posicion inicial que se va a extraer del arreglo
         for (int i = a.length(); pos > 0; i -= n)
         {
             pos = i-n;
@@ -114,11 +119,70 @@ int main()
         cout << endl << "suma: " << sum << endl;
         break;
     }
+    case 11:
+    {
+        bool seating[15][20] = {};
+        char option = 'R';
+        while(option == 'R' || option == 'C')
+        {
+            cout << "el estado actual de la matriz es: " << endl;
+            printSeating(seating);
+            cout << "desea reservar (R), cancelar (C) un asiento o finalizar el programa (cualquier otra letra): ";
+            cin >> option;
+            string pos;
+            unsigned int row, column;
+            switch (option) {
+            case 'R':
+            {
+                cout << "ingrese el lugar que quiere reservar primero la fila y luego la columna. Ej: B12" << endl;
+                cin >> pos;
+                row = (int)(pos[0]-'A');
+                column = stoi(pos.substr(1,pos.length()-1)) - 1;
+                if (!seating[row][column])
+                    seating[row][column] = true;
+                else
+                    cout << "el lugar ya estaba ocupado" << endl;
+                break;
+            }
+            case 'C':
+            {
+                cout << "ingrese el lugar que quiere cancelar primero la fila y luego la columna. Ej: B12" << endl;
+                cin >> pos;
+                row = (int)(pos[0]-'A');
+                column = stoi(pos.substr(1,pos.length()-1)) - 1;
+                if (seating[row][column])
+                    seating[row][column] = false;
+                else
+                    cout << "el lugar no estaba ocupado" << endl;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        break;
+    }
+    case 13:
+    {
+        int starImage[6][8] = {{0,3,4,0,0,0,6,8},
+                               {5,13,6,0,0,0,2,3},
+                               {2,6,2,7,3,0,10,0},
+                               {0,0,4,15,4,1,6,0},
+                               {0,0,7,12,6,9,10,4},
+                               {5,0,6,10,6,4,8,0}};
+        int counter = starCounter(starImage);
+        cout << "la cantidad de estrellas en la imagen es: " << counter << endl;
+        break;
+    }
+    case 15:
+    {
+
+        break;
+    }
     default:
         cout << "El ejercicio ingresado no existe" << endl;
         break;
     }
-
     return 0;
 }
 
@@ -169,4 +233,91 @@ void num2chars(int num, char **chars)
         i--;
         num /= 10;
     }while(num != 0);
+}
+void printSeating(bool seating[15][20])
+{
+    cout << "  ";
+    for (int i = 1; i <= 20; i++)
+        if (i < 10)
+        cout << ' ' << i << ' ';
+        else
+        cout << i << ' ';
+    cout << endl;
+    for (int i = 0; i < 15; i++)
+    {
+        cout << (char)(i + 'A') << ' ';
+        for (int j = 0; j < 20; j++)
+        {
+        if (seating[i][j] == false)
+                cout << " - ";
+        else
+                cout << " + ";
+
+        }
+        cout << endl;
+    }
+}
+int starCounter(int light[6][8])
+{
+    cout << "estellas encontradas en las posiciones: ";
+    int counter = 0;
+    for (int i = 1; i < 5; i++)
+    {
+        for (int j = 1; j < 7; j++)
+        {
+            int sum = -(*(*(light+i)+j));
+            for (int row = i-1; row <= i+1; row++)
+                sum += *(*(light+row)+j);
+            for (int col = j-1; col <= j+1; col++)
+                sum += *(*(light+i)+col);
+            if ((float)sum/5.0f > 6.0f)
+            {
+                counter += 1;
+                cout << '(' << i << ',' << j << "), ";
+            }
+
+        }
+    }
+    cout << endl;
+    return counter;
+}
+void intersection(int *square1, int *square2, int *intersection_square)
+{
+    int square_left[4];
+    int square_right[4];
+
+    // si ambos tienen mismas coordeanas, entonces la interseccion sera el cuadrado de menor tamano
+    if(square1[0] == square2[0] && square1[1] == square2[1]){
+        if(square1[2]*square1[3] > square2[2]*square2[3])
+        {
+            for (int i = 0; i < 4; i++)
+                intersection_square[i] = square2[i];
+            return;
+        }else
+        {
+            for (int i = 0; i < 4; i++)
+                intersection_square[i] = square1[i];
+            return;
+        }
+    }
+    // si el quadrado 1 esta mas la izquierda
+    if (square1[0] < square2[0])
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            square_left[i] = square1[i];
+            square_right[i] = square2[i];
+        }
+    }// si el quadrado 2 esta mas a la derecha
+    else if(square1[0] > square2[0])
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            square_left[i] = square2[i];
+            square_right[i] = square1[i];
+        }
+    }
+    // verifica que exista interseccion
+    if ((square_left[0]+square_left[2]) )
+
 }
