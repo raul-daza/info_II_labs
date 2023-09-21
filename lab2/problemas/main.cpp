@@ -9,6 +9,9 @@ unsigned short digitsCounter(int num);
 void num2chars(int num, char **chars);
 void printSeating(bool seating[15][20]);
 int starCounter(int light[6][8]);
+void intersection(int *square1, int *square2, int *intersectionSquare);
+bool isBothTouching(int min1, int max1, int min2, int max2, int &border, int adding, bool &noIntersection);
+bool isTouching(int min, int max, int &border);
 
 int main()
 {
@@ -281,43 +284,50 @@ int starCounter(int light[6][8])
     cout << endl;
     return counter;
 }
-void intersection(int *square1, int *square2, int *intersection_square)
+void intersection(int *square1, int *square2, int *intersectionSquare)
 {
-    int square_left[4];
-    int square_right[4];
-
-    // si ambos tienen mismas coordeanas, entonces la interseccion sera el cuadrado de menor tamano
-    if(square1[0] == square2[0] && square1[1] == square2[1]){
-        if(square1[2]*square1[3] > square2[2]*square2[3])
-        {
-            for (int i = 0; i < 4; i++)
-                intersection_square[i] = square2[i];
-            return;
-        }else
-        {
-            for (int i = 0; i < 4; i++)
-                intersection_square[i] = square1[i];
-            return;
-        }
-    }
-    // si el quadrado 1 esta mas la izquierda
-    if (square1[0] < square2[0])
+    bool touchingLeft = false, touchingRight = false, touchingTop = false, touchingBottom = false, noIntersection = false;
+    int leftmost = (square1[0] < square2[0]) ? square1[0] : square2[0];
+    int rightmost = ((square1[0]+square1[2]) > (square2[0]+square2[2])) ? (square1[0]+square1[2]) : (square2[0]+square2[2]);
+    int topmost = (square1[1] > square2[1]) ? square1[1] : square2[1];
+    int bottommost = ((square1[1]-square1[3]) < (square2[1]-square2[3])) ? (square1[1]-square1[3]) : (square2[1]-square2[3]);
+    while (~touchingLeft || ~touchingRight || ~touchingTop || ~touchingBottom)
     {
-        for (int i = 0; i < 4; i++)
-        {
-            square_left[i] = square1[i];
-            square_right[i] = square2[i];
-        }
-    }// si el quadrado 2 esta mas a la derecha
-    else if(square1[0] > square2[0])
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            square_left[i] = square2[i];
-            square_right[i] = square1[i];
-        }
-    }
-    // verifica que exista interseccion
-    if ((square_left[0]+square_left[2]) )
+        tounchingLeft = isBothtouching(square1[0], square1[0]+square1[2], square2[0], square2[0]+square2[2], leftmost, 1, noIntersection);
 
+
+
+    }
+    if (noIntersection)
+    {
+        for (int i = 0; i < 4; i++) intersectionSquare[i] = 0;
+        return;
+    }
+    intersectionSquare[0] = leftmost;
+    intersectionSquare[1] = topmost;
+    intersectionSquare[2] = leftmost + rightmost;
+    intersectionSquare[3] = topmost - bottommost;
+}
+bool isBothTouching(int min1, int max1, int min2, int max2, int &border, int adding, bool &noIntersection)
+{
+    if (!isTouching(min1, max1, border) || !isTouching(min2, max2, border))
+    {
+        border += adding;
+        return false;
+    }else if (!isTouching(min1, max1, border) && !isTouching(min2, max2, border))
+    {
+        noIntersection = true;
+        return true;
+    }else
+    {
+        return true;
+    }
+}
+bool isTouching(int min, int max, int &border)
+{
+    if (min <= border && border <= max)
+    {
+        return true;
+    }
+    return false;
 }
