@@ -9,9 +9,9 @@ unsigned short digitsCounter(int num);
 void num2chars(int num, char **chars);
 void printSeating(bool seating[15][20]);
 int starCounter(int light[6][8]);
-void intersection(int *square1, int *square2, int *intersectionSquare);
+bool intersection(int *square1, int *square2, int *intersectionSquare);
 bool isBothTouching(int min1, int max1, int min2, int max2, int &border, int adding, bool &noIntersection);
-bool isTouching(int min, int max, int &border);
+bool isTouching(int min, int max, int border);
 
 int main()
 {
@@ -179,7 +179,20 @@ int main()
     }
     case 15:
     {
-
+        int square1[4], square2[4], intersectionSquare[4];
+        cout << "ingrese el primer rectangulo en este orden: x, y, ancho, largo" << endl;
+        for (int i = 0; i < 4; i++) cin >> square1[i];
+        cout << "ingrese el segundo rectangulo en este orden: x, y, ancho, largo" << endl;
+        for (int i = 0; i < 4; i++) cin >> square2[i];
+        if (intersection(square1, square2, intersectionSquare))
+        {
+            cout << "la interseccion es el rectangulo: (" << intersectionSquare[0];
+            for (int i = 1; i < 4; i++) cout << ',' << intersectionSquare[i];
+            cout << ')' << endl;
+        }else
+        {
+            cout << "no hay interseccion" << endl;
+        }
         break;
     }
     default:
@@ -237,6 +250,7 @@ void num2chars(int num, char **chars)
         num /= 10;
     }while(num != 0);
 }
+
 void printSeating(bool seating[15][20])
 {
     cout << "  ";
@@ -260,6 +274,7 @@ void printSeating(bool seating[15][20])
         cout << endl;
     }
 }
+
 int starCounter(int light[6][8])
 {
     cout << "estellas encontradas en las posiciones: ";
@@ -284,46 +299,50 @@ int starCounter(int light[6][8])
     cout << endl;
     return counter;
 }
-void intersection(int *square1, int *square2, int *intersectionSquare)
+
+bool intersection(int *square1, int *square2, int *intersectionSquare)
 {
     bool touchingLeft = false, touchingRight = false, touchingTop = false, touchingBottom = false, noIntersection = false;
     int leftmost = (square1[0] < square2[0]) ? square1[0] : square2[0];
     int rightmost = ((square1[0]+square1[2]) > (square2[0]+square2[2])) ? (square1[0]+square1[2]) : (square2[0]+square2[2]);
     int topmost = (square1[1] > square2[1]) ? square1[1] : square2[1];
     int bottommost = ((square1[1]-square1[3]) < (square2[1]-square2[3])) ? (square1[1]-square1[3]) : (square2[1]-square2[3]);
-    while (~touchingLeft || ~touchingRight || ~touchingTop || ~touchingBottom)
+    while (!touchingLeft || !touchingRight || !touchingTop || !touchingBottom)
     {
-        tounchingLeft = isBothtouching(square1[0], square1[0]+square1[2], square2[0], square2[0]+square2[2], leftmost, 1, noIntersection);
-
-
-
-    }
-    if (noIntersection)
-    {
-        for (int i = 0; i < 4; i++) intersectionSquare[i] = 0;
-        return;
+        touchingLeft = isBothTouching(square1[0], square1[0]+square1[2], square2[0], square2[0]+square2[2], leftmost, 1, noIntersection);
+        touchingRight = isBothTouching(square1[0], square1[0]+square1[2], square2[0], square2[0]+square2[2], rightmost, -1, noIntersection);
+        touchingTop = isBothTouching(square1[1]-square1[3], square1[1], square2[1]-square2[3], square2[1], topmost, -1, noIntersection);
+        touchingBottom = isBothTouching(square1[1]-square1[3], square1[1], square2[1]-square2[3], square2[1], bottommost, 1, noIntersection);
+        if (noIntersection)
+        {
+            for (int i = 0; i < 4; i++) intersectionSquare[i] = 0;
+            return false;
+        }
     }
     intersectionSquare[0] = leftmost;
     intersectionSquare[1] = topmost;
-    intersectionSquare[2] = leftmost + rightmost;
+    intersectionSquare[2] = rightmost - leftmost;
     intersectionSquare[3] = topmost - bottommost;
+    return true;
 }
+
 bool isBothTouching(int min1, int max1, int min2, int max2, int &border, int adding, bool &noIntersection)
 {
-    if (!isTouching(min1, max1, border) || !isTouching(min2, max2, border))
-    {
-        border += adding;
-        return false;
-    }else if (!isTouching(min1, max1, border) && !isTouching(min2, max2, border))
+    if (!isTouching(min1, max1, border) && !isTouching(min2, max2, border))
     {
         noIntersection = true;
         return true;
+    }else if (!isTouching(min1, max1, border) || !isTouching(min2, max2, border))
+    {
+        border += adding;
+        return false;
     }else
     {
         return true;
     }
 }
-bool isTouching(int min, int max, int &border)
+
+bool isTouching(int min, int max, int border)
 {
     if (min <= border && border <= max)
     {
