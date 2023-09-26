@@ -195,6 +195,36 @@ int main()
         }
         break;
     }
+    case 17:
+    {
+        int num, sum1 = 0, sum2 = 0, sum3 = 0;
+        cout << "ingrese un numero: ";
+        cin >> num;
+        for (int i = 1; i <= num/2; i++)
+        {
+            if (num%i == 0)
+            {
+                sum1 += i;
+            }
+        }
+        for (int i = 1; i <= num; i++)
+        {
+            for (int j = 1; j <= i/2; j++)
+            {
+                if (i%j == 0)
+                {
+                    sum2 += j;
+                }
+            }
+            if (sum1 == i && sum2 == num)
+            {
+                sum3 += i;
+            }
+            sum2 = 0;
+        }
+        cout << "el resultado de la suma es: " << sum3 + num << endl;
+        break;
+    }
     default:
         cout << "El ejercicio ingresado no existe" << endl;
         break;
@@ -350,3 +380,4 @@ bool isTouching(int min, int max, int border)
     }
     return false;
 }
+
