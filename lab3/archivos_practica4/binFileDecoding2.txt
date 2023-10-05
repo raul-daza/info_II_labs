@@ -1,0 +1,6 @@
+Ej: Si se ingresa 4 y el archivo contiene AbCd.
+El archivo en binario sería:
+01000001011000100100001101100100
+El archivo codificado sería:
+
+10110100001111010001011010011011

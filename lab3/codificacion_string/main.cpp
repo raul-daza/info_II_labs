@@ -19,7 +19,7 @@ int main()
     cout << "ingrese la semilla: ";
     cin >> n;
     fstream fileinfo;
-    fileinfo.open("C:/Users/raulD/OneDrive/Documentos/QT/untitled/textoplano.txt", ios::in);
+    fileinfo.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/textoplano.txt", ios::in);
     if (fileinfo.is_open())
     {
         string line;
@@ -32,13 +32,14 @@ int main()
         switch (option) {
         case 1:
         {
+            text = "1234";
             string output = encoding1(text, n);
             fstream binfile;
-            binfile.open("C:/Users/raulD/OneDrive/Escritorio/binFileEncoding1.bin", ios::out | ios::binary);
+            binfile.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/binFileEncoding1.bin", ios::out | ios::binary);
             binfile << output;
             string decoOutput = decoding1(output, n);
             fstream decodefile;
-            decodefile.open("C:/Users/raulD/OneDrive/Escritorio/binFileDecoding1.txt", ios::out);
+            decodefile.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/binFileDecoding1.txt", ios::out);
             decodefile << decoOutput;
             decodefile.close();
             binfile.close();
@@ -49,11 +50,11 @@ int main()
         {
             string output = encoding2(text, n);
             fstream binfile;
-            binfile.open("C:/Users/raulD/OneDrive/Escritorio/binFileEncoding2.bin", ios::out | ios::binary);
+            binfile.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/binFileEncoding2.bin", ios::out | ios::binary);
             binfile << output;
             string decoOutput = decoding2(output, n);
             fstream decodefile;
-            decodefile.open("C:/Users/raulD/OneDrive/Escritorio/binFileDecoding2.txt", ios::out);
+            decodefile.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/binFileDecoding2.txt", ios::out);
             decodefile << decoOutput;
             decodefile.close();
             binfile.close();
