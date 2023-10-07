@@ -19,7 +19,7 @@ int main()
     cout << "ingrese la semilla: ";
     cin >> n;
     fstream fileinfo;
-    fileinfo.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/textoplano.txt", ios::in);
+    fileinfo.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/info.txt", ios::in);
     if (fileinfo.is_open())
     {
         string line;
@@ -29,10 +29,11 @@ int main()
             text += line;
             text += '\n';
         }
+        cout << text << endl;
         switch (option) {
         case 1:
         {
-            text = "1234";
+            // text = "Ë¤•va¦}¹äÀXï~¥’zb";
             string output = encoding1(text, n);
             fstream binfile;
             binfile.open("C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/binFileEncoding1.bin", ios::out | ios::binary);
