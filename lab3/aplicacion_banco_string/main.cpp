@@ -10,9 +10,9 @@ using namespace std;
 string encoding1(string input, unsigned int n);
 string decoding1(string output, unsigned int n);
 
-string sudoPath = "C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/sudo.bin"; // variable que contiene la direccion del archivo sudo.bin
-string tempPath = "C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/temp.bin"; // variable que contiene la direccion del archivo temp.bin
-string infoPath = "C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica4/info.bin"; // variable que contiene la direccion del archivo info.bin
+string sudoPath = "C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica3/sudo.bin"; // variable que contiene la direccion del archivo sudo.bin
+string tempPath = "C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica3/temp.bin"; // variable que contiene la direccion del archivo temp.bin
+string infoPath = "C:/Users/raulD/OneDrive/Documentos/QT/labs/lab3/archivos_practica3/info.bin"; // variable que contiene la direccion del archivo info.bin
 
 int main()
 {
